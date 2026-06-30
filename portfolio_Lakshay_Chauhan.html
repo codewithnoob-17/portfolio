@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lakshay Chauhan — Data Analyst</title>
+<style>
+/* ===== Token system
+   bg:        #0C0F14
+   bg-soft:   #12161D
+   bg-card:   #161B23
+   line:      #262C36
+   text-hi:   #F1F3F6
+   text-mid:  #9BA3AF
+   text-low:  #5C636F
+   gold:      #D9A441   (primary accent — warm, premium)
+   teal:      #4FB6C9   (secondary accent — data/chart feel)
+   Display: 'Fraunces' (characterful serif, used for headlines only)
+   Body: 'Inter'
+   Mono/labels: 'JetBrains Mono'
+*/
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+
+*{box-sizing:border-box; margin:0; padding:0;}
+html{scroll-behavior:smooth;}
+body{
+  background:#0C0F14; color:#F1F3F6; font-family:'Inter', sans-serif; line-height:1.65;
+  overflow-x:hidden;
+}
+a{color:inherit; text-decoration:none;}
+h1,h2,h3{font-family:'Fraunces', serif; font-weight:600; line-height:1.15; color:#F1F3F6;}
+p{color:#9BA3AF;}
+.mono{font-family:'JetBrains Mono', monospace;}
+
+/* subtle ambient backdrop */
+body::before{
+  content:''; position:fixed; inset:0; z-index:0; pointer-events:none;
+  background:
+    radial-gradient(ellipse 60% 40% at 15% 0%, rgba(217,164,65,0.08), transparent 60%),
+    radial-gradient(ellipse 50% 35% at 100% 30%, rgba(79,182,201,0.07), transparent 60%);
+}
+
+/* ===== Nav ===== */
+.nav{
+  display:flex; align-items:center; justify-content:space-between;
+  padding:20px 6vw; position:sticky; top:0; z-index:50;
+  background:rgba(12,15,20,0.82); backdrop-filter:blur(10px);
+  border-bottom:1px solid #262C36;
+}
+.nav__brand{font-family:'Fraunces', serif; font-weight:600; font-size:1.2rem; display:flex; align-items:center; gap:10px;}
+.nav__brand .dot{width:7px; height:7px; border-radius:50%; background:#D9A441; box-shadow:0 0 8px #D9A441;}
+.nav__links{display:flex; gap:32px; font-size:0.9rem; color:#9BA3AF;}
+.nav__links a{padding:4px 2px; border-bottom:2px solid transparent; transition:color .2s, border-color .2s;}
+.nav__links a:hover, .nav__links a.active{color:#F1F3F6; border-color:#D9A441;}
+.nav__toggle{display:none; flex-direction:column; gap:5px; cursor:pointer; background:none; border:none;}
+.nav__toggle span{width:24px; height:2px; background:#F1F3F6;}
+@media (max-width:780px){
+  .nav__links{
+    position:fixed; top:62px; left:0; right:0; flex-direction:column; gap:0;
+    background:#0C0F14; border-bottom:1px solid #262C36; max-height:0; overflow:hidden; transition:max-height .25s ease;
+  }
+  .nav__links.open{max-height:360px;}
+  .nav__links a{padding:16px 6vw; border-bottom:1px solid #262C36;}
+  .nav__toggle{display:flex;}
+}
+
+/* ===== Layout ===== */
+.wrap{max-width:1040px; margin:0 auto; padding:0 6vw; position:relative; z-index:1;}
+section{padding:90px 0; scroll-margin-top:80px;}
+.eyebrow{font-family:'JetBrains Mono', monospace; font-size:0.76rem; letter-spacing:0.12em; text-transform:uppercase; color:#D9A441; margin-bottom:14px; display:block;}
+h2{font-size:clamp(1.8rem, 3.2vw, 2.5rem); margin-bottom:16px;}
+.lede{font-size:1.05rem; max-width:660px;}
+
+/* ===== Welcome / hero screen ===== */
+.welcome{
+  min-height:100vh; display:flex; flex-direction:column; justify-content:center;
+  position:relative; z-index:1; padding:120px 6vw 60px;
+}
+.welcome__kicker{
+  font-family:'JetBrains Mono', monospace; font-size:0.78rem; color:#5C636F;
+  display:flex; gap:24px; flex-wrap:wrap; margin-bottom:36px;
+}
+.welcome__kicker b{color:#4FB6C9; font-weight:500;}
+.welcome h1{
+  font-size:clamp(2.6rem, 7vw, 5.4rem); max-width:16ch;
+  opacity:0; transform:translateY(18px); animation:rise .8s ease forwards;
+}
+.welcome h1 .accent{color:#D9A441; font-style:italic;}
+.welcome__sub{
+  max-width:560px; font-size:1.1rem; margin-top:24px;
+  opacity:0; transform:translateY(18px); animation:rise .8s ease forwards; animation-delay:.15s;
+}
+.welcome__cta{
+  display:flex; gap:16px; margin-top:38px; flex-wrap:wrap;
+  opacity:0; transform:translateY(18px); animation:rise .8s ease forwards; animation-delay:.3s;
+}
+@keyframes rise{ to{ opacity:1; transform:translateY(0); } }
+.welcome__scroll{
+  position:absolute; bottom:36px; left:6vw; font-family:'JetBrains Mono',monospace;
+  font-size:0.72rem; color:#5C636F; display:flex; align-items:center; gap:10px;
+}
+.welcome__scroll .line{width:36px; height:1px; background:#5C636F;}
+
+/* ===== Buttons ===== */
+.btn{
+  display:inline-flex; align-items:center; gap:8px; font-weight:600; font-size:0.95rem;
+  padding:13px 28px; border-radius:3px; border:1px solid #D9A441; color:#0C0F14; background:#D9A441;
+  cursor:pointer; transition:transform .15s, box-shadow .15s;
+}
+.btn:hover{transform:translateY(-2px); box-shadow:0 10px 26px rgba(217,164,65,0.22);}
+.btn--ghost{background:transparent; color:#F1F3F6; border-color:#262C36;}
+.btn--ghost:hover{border-color:#D9A441; color:#D9A441; box-shadow:none;}
+
+/* ===== KPI strip ===== */
+.kpis{display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:#262C36; border:1px solid #262C36; border-radius:6px; overflow:hidden;}
+.kpi{background:#161B23; padding:24px 20px;}
+.kpi .num{font-family:'Fraunces',serif; font-size:1.6rem; font-weight:600; color:#D9A441;}
+.kpi .label{font-size:0.72rem; color:#5C636F; text-transform:uppercase; letter-spacing:0.05em; margin-top:6px;}
+@media (max-width:780px){.kpis{grid-template-columns:repeat(2,1fr);}}
+
+/* ===== Education / skills ===== */
+.skills__grid{display:grid; grid-template-columns:repeat(2,1fr); gap:0 40px; margin-top:30px;}
+@media (max-width:780px){.skills__grid{grid-template-columns:1fr;}}
+.skill-row{display:flex; justify-content:space-between; align-items:center; padding:14px 0; border-bottom:1px solid #262C36;}
+.skill-row .name{font-weight:500; color:#F1F3F6; font-size:0.95rem;}
+.skill-row .bar{flex:1; max-width:140px; height:5px; background:#262C36; margin-left:20px; border-radius:3px; overflow:hidden;}
+.skill-row .bar i{display:block; height:100%; background:linear-gradient(90deg,#D9A441,#4FB6C9);}
+.edu-row{display:flex; gap:24px; padding:22px 0; border-top:1px solid #262C36;}
+.edu-row:last-child{border-bottom:1px solid #262C36;}
+.edu-row .yr{font-family:'JetBrains Mono',monospace; font-weight:500; color:#4FB6C9; width:130px; flex-shrink:0; font-size:0.88rem;}
+.edu-row .deg{font-weight:600; color:#F1F3F6; font-family:'Fraunces',serif; font-size:1.05rem;}
+
+/* ===== Projects ===== */
+.proj{padding:46px 0; border-bottom:1px solid #262C36;}
+.proj:first-of-type{padding-top:10px;}
+.proj__top{display:flex; justify-content:space-between; align-items:flex-start; gap:16px; flex-wrap:wrap; margin-bottom:6px;}
+.proj h3{font-size:1.4rem;}
+.proj .tool{font-family:'JetBrains Mono',monospace; font-size:0.78rem; color:#4FB6C9;}
+.proj ul{margin:16px 0 22px; padding-left:18px;}
+.proj li{margin-bottom:8px; line-height:1.65;}
+
+/* ===== Certifications ===== */
+.cert-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:18px; margin-top:40px;}
+@media (max-width:780px){.cert-grid{grid-template-columns:1fr;}}
+.cert-card{
+  background:#161B23; border:1px solid #262C36; border-radius:8px; padding:30px;
+  display:flex; flex-direction:column; gap:14px; transition:border-color .2s, transform .2s;
+}
+.cert-card:hover{border-color:#D9A441; transform:translateY(-3px);}
+.cert-card__top{display:flex; align-items:center; justify-content:space-between;}
+.cert-card .idx{font-family:'JetBrains Mono',monospace; font-size:0.74rem; color:#5C636F;}
+.cert-card .badge{
+  width:40px; height:40px; border-radius:50%; background:#0C0F14; border:1px solid #D9A441;
+  color:#D9A441; display:flex; align-items:center; justify-content:center; font-family:'Fraunces',serif; font-weight:700;
+}
+.cert-card h3{font-size:1.12rem;}
+.cert-card .issuer{font-family:'JetBrains Mono',monospace; font-size:0.8rem; color:#4FB6C9;}
+
+/* ===== Resume download ===== */
+.resume{
+  background:linear-gradient(135deg, #161B23, #11151c);
+  border:1px solid #262C36; border-radius:10px;
+  padding:50px 6vw; margin-top:0;
+  display:flex; align-items:center; justify-content:space-between; gap:30px; flex-wrap:wrap;
+}
+.resume h2{margin-bottom:8px;}
+.resume p{max-width:440px;}
+
+/* ===== Contact ===== */
+.contact__grid{display:grid; grid-template-columns:1.1fr 0.9fr; gap:50px; margin-top:36px;}
+@media (max-width:860px){.contact__grid{grid-template-columns:1fr;}}
+.contact-row{padding:18px 0; border-bottom:1px solid #262C36;}
+.contact-row .label{font-family:'JetBrains Mono',monospace; font-size:0.74rem; color:#D9A441; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:4px;}
+.contact-row .val{font-weight:600; color:#F1F3F6; font-size:1.02rem;}
+form{display:flex; flex-direction:column; gap:16px;}
+label{font-size:0.78rem; color:#9BA3AF; text-transform:uppercase; letter-spacing:0.04em; margin-bottom:6px; display:block;}
+input, textarea{
+  width:100%; background:#161B23; border:1px solid #262C36; border-radius:3px;
+  padding:12px 14px; color:#F1F3F6; font-family:'Inter',sans-serif; font-size:0.95rem;
+}
+input:focus, textarea:focus{outline:none; border-color:#D9A441;}
+textarea{resize:vertical; min-height:120px;}
+.note{font-size:0.82rem; color:#5C636F; margin-top:8px;}
+
+footer{
+  border-top:1px solid #262C36; padding:36px 6vw; display:flex; justify-content:space-between;
+  align-items:center; flex-wrap:wrap; gap:14px; color:#5C636F; font-size:0.85rem; position:relative; z-index:1;
+}
+footer a{color:#9BA3AF;}
+footer a:hover{color:#D9A441;}
+
+/* reveal on scroll */
+.reveal{opacity:0; transform:translateY(16px); transition:opacity .6s ease, transform .6s ease;}
+.reveal.in{opacity:1; transform:translateY(0);}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav__brand"><span class="dot"></span>Lakshay Chauhan</div>
+  <button class="nav__toggle" aria-label="menu"><span></span><span></span><span></span></button>
+  <div class="nav__links" id="navLinks">
+    <a href="#welcome" class="navlink active" data-target="welcome">Welcome</a>
+    <a href="#about" class="navlink" data-target="about">About</a>
+    <a href="#projects" class="navlink" data-target="projects">Projects</a>
+    <a href="#certifications" class="navlink" data-target="certifications">Certifications</a>
+    <a href="#resume" class="navlink" data-target="resume">Resume</a>
+    <a href="#contact" class="navlink" data-target="contact">Contact</a>
+  </div>
+</nav>
+
+<!-- WELCOME -->
+<header class="welcome" id="welcome">
+  <div class="welcome__kicker mono">
+    <span>SQL <b>●</b></span>
+    <span>POWER BI <b>●</b></span>
+    <span>EXCEL <b>●</b></span>
+    <span>PYTHON <b>●</b></span>
+    
+  </div>
+  <h1>Welcome to my <span class="accent">portfolio.</span></h1>
+  <p class="welcome__sub">I'm Lakshay Chauhan, an aspiring data analyst who turns raw spreadsheets into dashboards people actually use — built with Power BI, Excel, SQL, and Python.</p>
+  <div class="welcome__cta">
+    <a href="#projects" class="btn">View Projects →</a>
+    <a href="#resume" class="btn btn--ghost">Download Resume</a>
+  </div>
+  <div class="welcome__scroll"><span class="line"></span> SCROLL TO EXPLORE</div>
+</header>
+
+<!-- ABOUT -->
+<section class="wrap reveal" id="about">
+  <span class="eyebrow">// About</span>
+  <h2>Turning raw data into decisions</h2>
+  <p class="lede">Aspiring Data Analyst with hands-on experience building interactive dashboards and deriving business insights using Power BI, Excel, SQL, and Python. Skilled in data cleaning, visualization, and KPI tracking — with a strong foundation in turning raw data into actionable, decision-driving reports.</p>
+
+  <div style="margin-top:50px;">
+    <span class="eyebrow">// Education</span>
+    <h2 style="font-size:1.5rem;">Academic Background</h2>
+    <div class="edu-row">
+      <div class="yr">2023 — 2026</div>
+      <div>
+        <div class="deg">Bachelor of Commerce (B.Com)</div>
+        <p style="margin-top:4px;">Samrat Prithviraj Chauhan Degree College</p>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top:50px;">
+    <!-- <span class="eyebrow">// Toolkit</span> -->
+    <h2 style="font-size:1.5rem;">Skills</h2>
+    <div class="skills__grid">
+      <div>
+        <div class="skill-row"><span class="name">Power BI (DAX, Power Query)</span><div class="bar"><i style="width:90%"></i></div></div>
+        <div class="skill-row"><span class="name">Microsoft Excel (Pivot Tables, VLOOKUP)</span><div class="bar"><i style="width:88%"></i></div></div>
+        <div class="skill-row"><span class="name">Python (Pandas, NumPy, Matplotlib)</span><div class="bar"><i style="width:75%"></i></div></div>
+        <div class="skill-row"><span class="name">SQL (Basics)</span><div class="bar"><i style="width:55%"></i></div></div>
+      </div>
+      <div>
+        <div class="skill-row"><span class="name">Data Cleaning &amp; Transformation</span><div class="bar"><i style="width:85%"></i></div></div>
+        <div class="skill-row"><span class="name">Data Visualization</span><div class="bar"><i style="width:88%"></i></div></div>
+        <div class="skill-row"><span class="name">Google Sheets / MS Office</span><div class="bar"><i style="width:80%"></i></div></div>
+        <div class="skill-row"><span class="name">Jupyter Notebook / Git</span><div class="bar"><i style="width:60%"></i></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section class="wrap reveal" id="projects">
+  <span class="eyebrow">// Projects</span>
+  <h2>Dashboards That Tell a Story</h2>
+  <p class="lede">Three end-to-end analytics projects spanning retail, e-commerce, and operations.</p>
+
+  <article class="proj">
+    <div class="proj__top">
+      <h3>SuperStore Sales Dashboard</h3>
+      <span class="tool">Power BI · DAX · Power Query</span>
+    </div>
+    <div class="kpis">
+      <div class="kpi"><div class="num">$1.6M</div><div class="label">Total Sales</div></div>
+      <div class="kpi"><div class="num">22.3K</div><div class="label">Units Sold</div></div>
+      <div class="kpi"><div class="num">$175K</div><div class="label">Profit</div></div>
+      <div class="kpi"><div class="num">2019–20</div><div class="label">YoY Period</div></div>
+    </div>
+    <ul>
+      <li>Built an interactive Power BI dashboard tracking sales, units sold, and profit across regions, categories, and payment modes.</li>
+      <li>Forecasted 15-day sales trends and visualized year-over-year performance using a state-level geo map.</li>
+      <li>Leveraged DAX measures and Power Query to clean and transform raw sales data into a fully interactive reporting layer.</li>
+    </ul>
+    
+    <a href= "https://github.com/codewithnoob-17/Superstore-_sales-Forecast" target="_blank" rel="noopener">GitHub ↗</a>
+  </article>
+
+  <article class="proj">
+    <div class="proj__top">
+      <h3>Madhav Ecommerce Sales Dashboard</h3>
+      <span class="tool">Power BI · DAX · Power Query</span>
+    </div>
+    <div class="kpis">
+      <div class="kpi"><div class="num">$438K</div><div class="label">Total Sales</div></div>
+      <div class="kpi"><div class="num">5,615</div><div class="label">Units Sold</div></div>
+      <div class="kpi"><div class="num">44%</div><div class="label">COD Transactions</div></div>
+      <div class="kpi"><div class="num">63%</div><div class="label">Clothing Sales Share</div></div>
+    </div>
+    <ul>
+      <li>Designed a full-year dashboard analyzing sales and units across states, customers, and payment modes with quarter-wise interactive filtering.</li>
+      <li>Surfaced loss-making months and key payment/category trends, including COD share and Clothing's dominant sales volume.</li>
+      <li>Enabled clearer, data-driven decision-making by consolidating customer and product-level insights into a single interactive report.</li>
+    </ul>
+    
+    <a href= "https://github.com/codewithnoob-17/Mahadev-Ecommerce-Sales-Dashboard-Power-BI-" target="_blank" rel="noopener">GitHub ↗</a>
+  </article>
+
+  <article class="proj">
+    <div class="proj__top">
+      <h3>Coffee Shop Sales Analysis Dashboard</h3>
+      <span class="tool">Microsoft Excel</span>
+    </div>
+    <div class="kpis">
+      <div class="kpi"><div class="num">149K+</div><div class="label">Transactions</div></div>
+      <div class="kpi"><div class="num">$698K+</div><div class="label">Sales Revenue</div></div>
+      <div class="kpi"><div class="num">8–10 AM</div><div class="label">Peak Sales Hour</div></div>
+      <div class="kpi"><div class="num">Identified</div><div class="label">Top Store &amp; Products</div></div>
+    </div>
+    <ul>
+      <li>Developed an interactive Excel dashboard to analyze customer transactions and total sales revenue.</li>
+      <li>Built dynamic dashboards using Pivot Tables, Pivot Charts, Slicers, and Conditional Formatting to monitor KPIs and sales trends.</li>
+      <li>Analyzed customer footfall, hourly sales, store performance, and product-wise revenue to uncover actionable business insights.</li>
+      <li>Identified peak sales hours, the highest-performing store, and top-selling products to support data-driven decision-making.</li>
+    </ul>
+    
+    <a href= "https://github.com/codewithnoob-17/Coffee---Shop-sales" target="_blank" rel="noopener">GitHub ↗</a>
+  </article>
+</section>
+
+<!-- CERTIFICATIONS -->
+<section class="wrap reveal" id="certifications">
+  <span class="eyebrow">// Certifications</span>
+  <h2>Credentials &amp; Job Simulations</h2>
+  <p class="lede">Job simulations and courses completed from Deloitte, Tata, Simplilearn, Microsoft, and Code with Harry.</p>
+
+  <div class="cert-grid">
+    <div class="cert-card">
+      <div class="cert-card__top"><div class="idx">CERT — 01</div><div class="badge">D</div></div>
+      <h3>Data Analytics Job Simulation</h3>
+      <span class="issuer">Deloitte Australia</span>
+      <p>Simulated real-world forensic and data analytics tasks as performed by Deloitte's analytics consultants.</p>
+    </div>
+    <div class="cert-card">
+      <div class="cert-card__top"><div class="idx">CERT — 02</div><div class="badge">T</div></div>
+      <h3>GenAI Powered Data Analytics Job Simulation</h3>
+      <span class="issuer">Tata</span>
+      <p>Applied generative AI tools to data analytics workflows in a simulated enterprise environment.</p>
+    </div>
+    <div class="cert-card">
+      <div class="cert-card__top"><div class="idx">CERT — 03</div><div class="badge">S</div></div>
+      <h3>Analyzing &amp; Visualizing Data with Power BI</h3>
+      <span class="issuer">Simplilearn</span>
+      <p>Built dashboards and reports covering data modeling, DAX, and visualization best practices in Power BI.</p>
+    </div>
+    <div class="cert-card">
+      <div class="cert-card__top"><div class="idx">CERT — 04</div><div class="badge">M</div></div>
+      <h3>Microsoft Excel 2013 Certification</h3>
+      <span class="issuer">Microsoft</span>
+      <p>Validated core Excel proficiency including formulas, formatting, and data management.</p>
+    </div>
+    <div class="cert-card">
+      <div class="cert-card__top"><div class="idx">CERT — 05</div><div class="badge">C</div></div>
+      <h3>AI Powered Data Analytics</h3>
+      <span class="issuer">Code with Harry</span>
+      <p>Covered AI-assisted approaches to data cleaning, analysis, and visualization for analysts.</p>
+    </div>
+  </div>
+</section>
+
+<!-- RESUME -->
+<section class="wrap reveal" id="resume">
+  <span class="eyebrow">// Resume</span>
+  <h2>Download my full resume</h2>
+  <div class="resume" style="margin-top:30px;">
+    <div>
+      <h2 style="font-size:1.4rem;">Lakshay_Chauhan_Resume.pdf</h2>
+      <p>Get the complete PDF with my education, skills, projects, and certifications — ready to share with recruiters.</p>
+    </div>
+    <a href="Lakshay_Chauhan_Resume.pdf" download class="btn">⬇ Download Resume</a>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="wrap reveal" id="contact">
+  <span class="eyebrow">// Contact</span>
+  
+  <div class="contact__grid">
+    <div>
+      <div class="contact-row">
+        <div class="label">Email</div>
+        <a class="val" href="mailto:lakshaychauhan81604@gmail.com">lakshaychauhan81604@gmail.com</a>
+      </div>
+      <div class="contact-row">
+        <div class="label">Phone</div>
+        <a class="val" href="9756303827">9756303827</a>
+      </div>
+      <div class="contact-row">
+        <div class="label">LinkedIn</div>
+        
+        <a href="https://www.linkedin.com/in/lakshay-chauhan-086513246" target="_blank" rel="noopener">LinkedIn ↗</a>
+      </div>
+      
+      <div class="contact-row">
+        <div class="label">GitHub</div>
+        <a href="https://github.com/codewithnoob-17" target="_blank" rel="noopener">GitHub ↗</a>
+      </div>
+      
+    </div>
+
+    <form onsubmit="event.preventDefault(); this.querySelector('.note-success').style.display='block';">
+      <div>
+        <label for="name">Name</label>
+        <input id="name" type="text" placeholder="Your name" required>
+      </div>
+      <div>
+        <label for="email">Email</label>
+        <input id="email" type="email" placeholder="you@example.com" required>
+      </div>
+      <div>
+        <label for="message">Message</label>
+        <textarea id="message" placeholder="What would you like to discuss?" required></textarea>
+      </div>
+      <button type="submit" class="btn">Send Message</button>
+      <p class="note note-success" style="display:none; color:#4FB6C9;">This form is a static demo — connect it to a service like Formspree to receive real messages. Meanwhile, email me directly above.</p>
+    </form>
+  </div>
+</section>
+
+<footer>
+  <span>© 2026 Lakshay Chauhan</span>
+  <span>lakshaychauhan81604@gmail.com · 9756303827</span>
+</footer>
+
+<script>
+  // mobile nav toggle
+  const toggle = document.querySelector('.nav__toggle');
+  const links = document.getElementById('navLinks');
+  toggle.addEventListener('click', () => links.classList.toggle('open'));
+  document.querySelectorAll('.navlink').forEach(a => a.addEventListener('click', () => links.classList.remove('open')));
+
+  // active nav link on scroll
+  const sections = document.querySelectorAll('section[id], header[id]');
+  const navlinks = document.querySelectorAll('.navlink');
+  const spy = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting){
+        navlinks.forEach(l => l.classList.toggle('active', l.dataset.target === entry.target.id));
+      }
+    });
+  }, {rootMargin:'-45% 0px -50% 0px'});
+  sections.forEach(s => spy.observe(s));
+
+  // scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target);} });
+  }, {threshold:0.1});
+  reveals.forEach(r => io.observe(r));
+</script>
+</body>
+</html>
